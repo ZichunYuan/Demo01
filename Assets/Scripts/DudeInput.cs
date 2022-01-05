@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/Animation/DudeInput.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/Scripts/DudeInput.inputactions'
 
 using System;
 using System.Collections;
@@ -22,6 +22,14 @@ public class @DudeInput : IInputActionCollection, IDisposable
                     ""name"": ""Movement"",
                     ""type"": ""Value"",
                     ""id"": ""686b52f9-d067-4ea2-935e-256c976fb757"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""MouseLook"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""085337e9-1453-47df-ae71-1617679e435a"",
                     ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """"
@@ -82,6 +90,17 @@ public class @DudeInput : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""98578fc3-0550-40bc-930b-14424668a69d"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseLook"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -91,6 +110,7 @@ public class @DudeInput : IInputActionCollection, IDisposable
         // Dude
         m_Dude = asset.FindActionMap("Dude", throwIfNotFound: true);
         m_Dude_Movement = m_Dude.FindAction("Movement", throwIfNotFound: true);
+        m_Dude_MouseLook = m_Dude.FindAction("MouseLook", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -141,11 +161,13 @@ public class @DudeInput : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Dude;
     private IDudeActions m_DudeActionsCallbackInterface;
     private readonly InputAction m_Dude_Movement;
+    private readonly InputAction m_Dude_MouseLook;
     public struct DudeActions
     {
         private @DudeInput m_Wrapper;
         public DudeActions(@DudeInput wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Dude_Movement;
+        public InputAction @MouseLook => m_Wrapper.m_Dude_MouseLook;
         public InputActionMap Get() { return m_Wrapper.m_Dude; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -158,6 +180,9 @@ public class @DudeInput : IInputActionCollection, IDisposable
                 @Movement.started -= m_Wrapper.m_DudeActionsCallbackInterface.OnMovement;
                 @Movement.performed -= m_Wrapper.m_DudeActionsCallbackInterface.OnMovement;
                 @Movement.canceled -= m_Wrapper.m_DudeActionsCallbackInterface.OnMovement;
+                @MouseLook.started -= m_Wrapper.m_DudeActionsCallbackInterface.OnMouseLook;
+                @MouseLook.performed -= m_Wrapper.m_DudeActionsCallbackInterface.OnMouseLook;
+                @MouseLook.canceled -= m_Wrapper.m_DudeActionsCallbackInterface.OnMouseLook;
             }
             m_Wrapper.m_DudeActionsCallbackInterface = instance;
             if (instance != null)
@@ -165,6 +190,9 @@ public class @DudeInput : IInputActionCollection, IDisposable
                 @Movement.started += instance.OnMovement;
                 @Movement.performed += instance.OnMovement;
                 @Movement.canceled += instance.OnMovement;
+                @MouseLook.started += instance.OnMouseLook;
+                @MouseLook.performed += instance.OnMouseLook;
+                @MouseLook.canceled += instance.OnMouseLook;
             }
         }
     }
@@ -172,5 +200,6 @@ public class @DudeInput : IInputActionCollection, IDisposable
     public interface IDudeActions
     {
         void OnMovement(InputAction.CallbackContext context);
+        void OnMouseLook(InputAction.CallbackContext context);
     }
 }

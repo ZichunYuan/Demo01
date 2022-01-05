@@ -14,6 +14,8 @@ public class CharacterMovement : MonoBehaviour
     private float horizontal;
     private float acceleration;
     private float speed;
+    private float fallSpeed;
+
 
     private Vector2 movement;
 
@@ -64,7 +66,9 @@ public class CharacterMovement : MonoBehaviour
         velocity = 0;
         horizontal = 0;
         acceleration = 1f;
-        speed = 3f;
+        speed = 4f;
+        fallSpeed = 3f;
+
     }
 
     private void HandleRunMovement(InputAction.CallbackContext context)
@@ -81,14 +85,21 @@ public class CharacterMovement : MonoBehaviour
 
     private void HandleMovement()
     {
+        Vector3 velocity = Vector3.zero;
         Vector3 moveDirection = new Vector3(movement.x,0,movement.y);
         //Align the player to Camera's view.
-        Quaternion cameraRotation = Quaternion.LookRotation(this.transform.forward,Vector3.up);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, 
+            Camera.main.transform.localEulerAngles.y, transform.localEulerAngles.z);
+
+        //Player walks in local.
+        //Quaternion cameraRotation = Quaternion.Euler(transform.forward);
+        Quaternion cameraRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
         moveDirection = cameraRotation*moveDirection;
+        controller.Move(moveDirection * Time.deltaTime * speed);
 
         //Handle Moving Downstairs
-        if (controller.isGrounded == false) moveDirection += Physics.gravity;
-        controller.Move(moveDirection * Time.deltaTime * speed);
+        if (controller.isGrounded == false) velocity += Physics.gravity;
+        controller.Move(velocity * Time.deltaTime * fallSpeed);
     }
 
     private void HandleRotation()
@@ -105,7 +116,7 @@ public class CharacterMovement : MonoBehaviour
     {
         movement = input.Dude.Movement.ReadValue<Vector2>();
         HandleMovement();
-        HandleRotation();
+        //HandleRotation();
         animator.SetFloat("Moving", movement.magnitude);
     }
 }
